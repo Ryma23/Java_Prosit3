@@ -4,8 +4,10 @@ public class Magasin {
     private int capaciteMax;
     private Produit[] produits;
     private int nombreProduits;
-
     private static int compteurTotalProduits = 0;
+
+    private Employe[] employes;
+    private int nombreEmployes;
 
     public Magasin(int identifiant, String adresse, int capaciteMax) {
         this.identifiant = identifiant;
@@ -13,6 +15,9 @@ public class Magasin {
         this.capaciteMax = capaciteMax;
         this.produits = new Produit[capaciteMax];
         this.nombreProduits = 0;
+        this.employes = new Employe[20];  // Limite de 20 employés
+        this.nombreEmployes = 0;
+
     }
 
     public int getIdentifiant() {
@@ -43,6 +48,7 @@ public class Magasin {
         return nombreProduits;
     }
 
+
     public void ajouter(Produit p) {
         if (chercherProduit(p)) {
             System.out.println("Produit déjà présent dans le magasin. Ajout annulé.");
@@ -50,11 +56,12 @@ public class Magasin {
             produits[nombreProduits] = p;
             nombreProduits++;
             compteurTotalProduits++;
-            System.out.println("Produit ajouté avec succès");
+            System.out.println("Produit ajouté avec succès.");
         } else {
             System.out.println("Impossible d'ajouter le produit. Capacité maximale atteinte.");
         }
     }
+
 
     public void afficherMagasin() {
         System.out.println(this.toString());
@@ -98,11 +105,9 @@ public class Magasin {
         }
     }
 
-
     public boolean supprimez(Produit p) {
         for (int i = 0; i < nombreProduits; i++) {
             if (produits[i].comparer(p)) {
-                // Décaler les éléments pour combler le vide
                 for (int j = i; j < nombreProduits - 1; j++) {
                     produits[j] = produits[j + 1];
                 }
@@ -116,5 +121,51 @@ public class Magasin {
         System.out.println("Produit non trouvé dans le magasin.");
         return false;
     }
-}
+    public void ajouterEmploye(Employe e) {
+        if (nombreEmployes < employes.length) {
+            employes[nombreEmployes] = e;
+            nombreEmployes++;
+        } else {
+            System.out.println("Impossible d'ajouter l'employé. Limite atteinte.");
+        }
+    }
 
+    public void afficherEmployes() {
+        for (int i = 0; i < nombreEmployes; i++) {
+            System.out.println(employes[i]);
+        }
+    }
+
+    public void afficherSalaires() {
+        for (int i = 0; i < nombreEmployes; i++) {
+            System.out.println("Salaire de " + employes[i].getNom() + ": " + employes[i].calculerSalaire());
+        }
+    }
+    public void affichenbEmployeParType() {
+        int nbCaissiers = 0;
+        int nbVendeurs = 0;
+        int nbResponsables = 0;
+
+
+        for (int i = 0; i < nombreEmployes; i++) {
+            if (employes[i] instanceof Caissier) {
+                nbCaissiers++;
+            } else if (employes[i] instanceof Vendeur) {
+                nbVendeurs++;
+            } else if (employes[i] instanceof Responsable) {
+                nbResponsables++;
+            }
+        }
+        System.out.println("Nombre de Caissiers : " + nbCaissiers);
+        System.out.println("Nombre de Vendeurs : " + nbVendeurs);
+        System.out.println("Nombre de Responsables : " + nbResponsables);
+    }
+    public void afficherPrimesResponsables() {
+        for (int i = 0; i < nombreEmployes; i++) {
+            if (employes[i] instanceof Responsable) {
+                System.out.println("Prime de " + employes[i].getNom() + ": " + ((Responsable) employes[i]).getPrime());
+            }
+        }
+    }
+
+}
